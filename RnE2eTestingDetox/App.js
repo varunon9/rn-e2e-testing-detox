@@ -6,7 +6,7 @@
  * @flow
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -14,58 +14,94 @@ import {
   View,
   Text,
   StatusBar,
+  TextInput,
+  Button,
+  ActivityIndicator
 } from 'react-native';
 
 import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
+  Colors
 } from 'react-native/Libraries/NewAppScreen';
 
+const LOGIN_STATUS = {
+  NOT_LOGGED_IN: -1,
+  LOGGING_IN: 0,
+  LOGGED_IN: 1
+};
+
+
 const App: () => React$Node = () => {
+  const [loginData, setLoginData] = useState({
+    username: '',
+    password: ''
+  });
+
+  const [loginStatus, setLoginStatus] = useState(LOGIN_STATUS.NOT_LOGGED_IN);
+
+  const onLoginDataChange = (key) => {
+    return (value) => {
+      const newLoginData = Object.assign({}, loginData);
+      newLoginData[key] = value;
+      setLoginData(newLoginData);
+    };
+  };
+
+  const onLoginPress = () => {
+    setLoginStatus(LOGIN_STATUS.LOGGING_IN);
+    setTimeout(() => {
+      setLoginStatus(LOGIN_STATUS.LOGGED_IN);
+    }, 1500);
+  };
+
   return (
     <>
       <StatusBar barStyle="dark-content" />
-      <SafeAreaView>
+      <SafeAreaView style={styles.container}>
         <ScrollView
           contentInsetAdjustmentBehavior="automatic"
           style={styles.scrollView}>
-          <Header />
-          {global.HermesInternal == null ? null : (
-            <View style={styles.engine}>
-              <Text style={styles.footer}>Engine: Hermes</Text>
-            </View>
-          )}
-          <View style={styles.body}>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Step One</Text>
-              <Text style={styles.sectionDescription}>
-                Edit <Text style={styles.highlight}>App.js</Text> to change this
-                screen and then come back to see your edits.
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>See Your Changes</Text>
-              <Text style={styles.sectionDescription}>
-                <ReloadInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Debug</Text>
-              <Text style={styles.sectionDescription}>
-                <DebugInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Learn More</Text>
-              <Text style={styles.sectionDescription}>
-                Read the docs to discover what to do next:
-              </Text>
-            </View>
-            <LearnMoreLinks />
-          </View>
+          {
+            loginStatus === LOGIN_STATUS.LOGGED_IN ?
+              <View testID="dashboardView">
+                <Text style={styles.heading} testID="dashboardHeadingText">
+                  Hello {loginData.username}
+                </Text>
+                <Text style={[styles.link, styles.mt12]}>
+                  Edit your profile
+                </Text>
+              </View>
+              :
+              <View testID="loginView">
+                <Text style={styles.heading}>Please Login</Text>
+                <Text style={styles.mt12}>Username</Text>
+                <TextInput
+                  style={[styles.textInput, styles.mt12]}
+                  placeholder={'Enter your username'}
+                  onChangeText={onLoginDataChange('username')}
+                  value={loginData.username}
+                  testID="usernameInput"
+                />
+                <Text style={styles.mt12}>Password</Text>
+                <TextInput
+                  secureTextEntry
+                  style={[styles.textInput, styles.mt12, styles.mb12]}
+                  placeholder={'Enter your password'}
+                  onChangeText={onLoginDataChange('password')}
+                  value={loginData.password}
+                  testID="passwordInput"
+                />
+                <Button
+                  title="Login"
+                  onPress={onLoginPress}
+                  testID="loginButton"
+                />
+                {
+                  loginStatus === LOGIN_STATUS.LOGGING_IN ?
+                    <ActivityIndicator style={styles.mt12} />
+                    : null
+                }
+              </View>
+          }
         </ScrollView>
       </SafeAreaView>
     </>
@@ -73,42 +109,35 @@ const App: () => React$Node = () => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1
+  },
   scrollView: {
-    backgroundColor: Colors.lighter,
-  },
-  engine: {
-    position: 'absolute',
-    right: 0,
-  },
-  body: {
     backgroundColor: Colors.white,
+    padding: 16
   },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  heading: {
+    textAlign: 'center',
+    fontSize: 18
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: Colors.black,
+  textInput: {
+    borderColor: Colors.lighter,
+    borderWidth: 1,
+    borderRadius: 4,
+    paddingLeft: 10,
+    paddingTop: 4,
+    paddingRight: 4,
+    paddingBottom: 4
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-    color: Colors.dark,
+  mt12: {
+    marginTop: 12
   },
-  highlight: {
-    fontWeight: '700',
+  mb12: {
+    marginBottom: 12
   },
-  footer: {
-    color: Colors.dark,
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
-  },
+  link: {
+    color: '#3543bf'
+  }
 });
 
 export default App;
