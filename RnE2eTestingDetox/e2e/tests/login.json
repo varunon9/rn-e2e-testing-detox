@@ -1,0 +1,86 @@
+{
+  "describe": "Login flow test",
+  "flow": [
+    {
+      "it": "should have login screen",
+      "steps": [
+        {
+          "type": "assertion",
+          "element": {
+            "by": "id",
+            "value": "loginView"
+          },
+          "effect": {
+            "key": "toBeVisible",
+            "value": ""
+          }
+        }
+      ]
+    },
+    {
+      "it": "should fill login form",
+      "steps": [
+        {
+          "type": "action",
+          "element": {
+            "by": "id",
+            "value": "usernameInput"
+          },
+          "effect": {
+            "key": "typeText",
+            "value": "varunk"
+          }
+        },
+        {
+          "type": "action",
+          "element": {
+            "by": "id",
+            "value": "passwordInput"
+          },
+          "effect": {
+            "key": "typeText",
+            "value": "test123\n"
+          }
+        },
+        {
+          "type": "action",
+          "element": {
+            "by": "id",
+            "value": "loginButton"
+          },
+          "effect": {
+            "key": "tap",
+            "value": ""
+          }
+        }
+      ]
+    },
+    {
+      "it": "should show dashboard screen",
+      "steps": [
+        {
+          "type": "assertion",
+          "element": {
+            "by": "id",
+            "value": "dashboardView"
+          },
+          "effect": {
+            "key": "toBeVisible",
+            "value": ""
+          }
+        },
+        {
+          "type": "assertion",
+          "element": {
+            "by": "id",
+            "value": "loginView"
+          },
+          "effect": {
+            "key": "toNotExist",
+            "value": ""
+          }
+        }
+      ]
+    }
+  ]
+}
