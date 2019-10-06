@@ -149,3 +149,7 @@ describe('Login flow test', () => {
 ### Git diff for setting up Detox in react-native Android
 
 https://github.com/varunon9/rn-e2e-testing-detox/commit/8536e816cd256e75794a8327a94400f462326f03
+
+### Medium Blog
+
+https://medium.com/@varunon9/e2e-testing-of-react-native-app-android-using-detox-a-step-by-step-guide-bfb520c1a9ac?sk=bd355b27920cf639e1b202a57667e2ec
